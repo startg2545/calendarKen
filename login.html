@@ -1,0 +1,110 @@
+<html>
+<head>
+<title>Login Form</title>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style type="text/css">
+  .head{
+    font-size: 50px;
+    font-family: "ayar_juno";
+  }
+  @font-face{
+		font-family: "ayar_juno";
+		src: url('font/ayar_juno.ttf');
+	}
+</style>
+</head>
+<body>
+  <div style="text-align: center;white-space: pre;">
+    <form action="calendarView.html" method="post">
+      <div class="head" style="margin: 0; display:inline; white-space:normal;">
+        <b>Welcome!</b>
+      </div>
+
+      <label for="unameInput"><b>Username</b></label>
+      <input type="text" placeholder="Enter username" 
+      id="unameInput" key="unameInput" name="unameInput">
+
+      <label for="pswInput"><b>Password</b></label>
+        <input type="password" placeholder="Enter password" 
+        id="pswInput" key="pswInput" name="pswInput">
+
+      <label style="margin: 0; display:inline; white-space: normal;">
+        <button type="button"><a href="signup.html">Sign up</a></button>
+        <button type="submit" id="submit" value="submit">Login</button>
+        <input type="checkbox" id="checkboxid" onclick='RememberMe();'>
+        <label>Remember me</label>
+      </label>
+    </form>
+  </div>
+
+    <script>
+      
+      // retrieve information from signup.html
+      var username = localStorage.getItem('uname');
+      var password = localStorage.getItem('psw');
+
+      // retrieve information from remember me
+      var usernameRemember = localStorage.getItem('unameRemember')
+      var passwordRemember = localStorage.getItem('pswRemember')
+
+      // define information from input
+      var usernameInput = document.getElementById('unameInput');
+      var passwordInput = document.getElementById('pswInput');
+
+      var isLoginSuccess = new Boolean(false);
+      var isRememberMe = new Boolean(false);
+
+      var RememberMe = function(){isRememberMe = true;}
+
+      // your username and password will appears if you had checked remember me
+      window.onload = function() {
+        usernameInput.value=usernameRemember;
+        passwordInput.value=passwordRemember;
+      };
+
+      // login when user click on login button
+      $("submit").addEventListener("click",function(e){
+        // check your username and password 
+        if(username==usernameInput.value && password==passwordInput.value)
+        {
+          alert('Login success!');
+          isLoginSuccess = true;
+        }else
+        {
+          alert('Login fail!'); 
+          e.preventDefault();
+        }
+
+        // check you have checked remember me or not
+        if(isRememberMe==true)
+        {
+          localStorage.setItem('unameRemember',usernameInput.value);
+          localStorage.setItem('pswRemember',passwordInput.value);
+        }else
+        {
+          localStorage.removeItem('unameRemember');
+          localStorage.removeItem('pswRemember');
+        }
+      });
+
+      function $(id)
+      {
+        return document.getElementById(id); // <--- I don't actual know how this work
+      }
+        // let x = $("uname");
+        // x.addEventListener("focus", unamefocus, true);
+        // x.addEventListener("blur", unameblur, true);
+        
+        // function unamefocus()
+        // {
+        //     $("uname").style.backgroundColor = "yellow";
+
+        // }
+        // function unameblur()
+        // {
+        //     $("uname").style.backgroundColor = "green";
+        // }
+    </script>
+    
+</body>
+</html>

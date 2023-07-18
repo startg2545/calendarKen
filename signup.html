@@ -1,0 +1,247 @@
+<html>
+<head>
+<title>Sign up Form</title>
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style type="text/css">
+</style>
+</head>
+<body>
+
+    <div style="text-align: center; white-space: pre;">
+    <form action="login.html" method="post">
+        
+        <label for="uname"><b>Username</b></label>
+        <input type="text" placeholder="Enter username" id="uname" key="uname"
+        name="uname" onkeyup="checkValiUname();">
+        <span id="msgValiUname"></span>
+
+        <label><b>Name</b></label>
+        <input type="text" placeholder="Enter your name" id="name" name="name">
+        <span id="msgValiName"></span>
+        
+        <label for="psw"><b>Password</b></label>
+        <input type="password" placeholder="Enter password" id="psw" 
+        name="psw" onkeyup='checkValiPsw();' >
+        <span id="msgValiPsw"></span>
+        
+        <label for="psw-repeat"><b>Confirm Password</b></label>
+        <input type="password" placeholder="Confirm password" id="psw-repeat" 
+        name="psw-repeat" onkeyup='checkValiMatch();' >
+        <span id="msgMatch"></span>
+        
+        <label for="email"><b>Email</b></label>
+        <input type="email" placeholder="Enter email" id="email" 
+        name="email" onkeyup='checkValiEmail();'>
+        <span id="msgEmail"></span>
+
+        <div style="margin: 0; display:inline; white-space: normal;">
+            <label>I'm 18 years old!</label>
+            <input type="checkbox" id="checkboxid" onclick='checkValiChild()'>
+        </div>
+        <span id='msgCheckbox'></span>
+
+        <label style="margin: 0; display:inline; white-space: normal;">
+            <button type="button"><a href="login.html">Cancel</a></button>
+            <button type="submit" id="submit" value="submit">Sign up</button>
+        </label>
+    </form>
+    </div>
+    <script>
+        window.localStorage // to store information 
+
+        // define variable for password
+        var username = document.getElementById('uname');
+        var password = document.getElementById('psw');
+        var passwordRepeat = document.getElementById('psw-repeat');
+        var email = document.getElementById('email');
+        var checkboxid = document.getElementById('checkboxid');
+
+        // define message for notification
+        var messageValiUname =  document.getElementById('msgValiUname');
+        var messagePassword = document.getElementById('msgValiPsw');
+        var messageMatch = document.getElementById('msgMatch');
+        var messageCheckbox = document.getElementById('msgCheckbox');
+        var messageEmail = document.getElementById('msgEmail');
+
+        // define regular expression
+        var lowerCaseLetters = /[a-z]/g; 
+        var upperCaseLetters = /[A-Z]/g;  
+        var numbers = /[0-9]/g; 
+        var symbols = /[-!$%^&*()_+|~=`{}\[\]:";'<>?,.\/]/g; 
+        var emailSymbols = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/; 
+        
+        // define are they in correct format or not
+        let isUname = new Boolean(false); 
+        let isPsw = new Boolean(false); 
+        let isMatch = new Boolean(false); 
+        let isEmail = new Boolean(false); 
+        let isChild = new Boolean(false); 
+
+        var checkValiUname = function()
+        {
+            var isCorrect = new Boolean(false);
+
+            // check the username validation
+                if(username.value.length>4 &&
+                username.value.match(lowerCaseLetters) || username.value.match(upperCaseLetters))
+                {   
+                    if(username.value.match(/[!$%^&*()+|~=`{}\[\]:";'<>?,.\/]/))
+                    {
+                        isCorrect = false;
+                    }else
+                    {
+                        isCorrect = true;
+                    }
+                }
+                else
+                {
+                    isCorrect = false;
+                }
+
+                // show message if username is correct format
+                if(isCorrect==true)
+                {
+                    messageValiUname.innerHTML = "Your username is in the correct format.";
+                    messageValiUname.style.color = "green";
+                    isUname = true;
+                }else
+                {
+                    messageValiUname.innerHTML = "At least 5 characters and can include numbers, _ and –";
+                    messageValiUname.style.color = "red";
+                    isUname = false;
+                }
+
+                // check is username already taken?
+                if(localStorage.getItem('uname')==username.value)
+                {
+                    messageValiUname.innerHTML = "This username is already taken."
+                    messageValiUname.style.color = "red";
+                    isUname = false;
+                }
+        }
+
+        var checkValiPsw = function()
+        {
+            // check the password validation
+            if (password.value.match(lowerCaseLetters) && password.value.match(upperCaseLetters) &&
+            password.value.match(numbers) && password.value.length>7 && password.value.match(symbols)){
+                messagePassword.innerHTML = "Your password is in the correct format.";
+                messagePassword.style.color = "green";
+                isPsw = true;
+            }else{
+                messagePassword.innerHTML = "Your passwords must be at least 8 characters, containing both upper and lower case letters, numbers and symbols.";
+                messagePassword.style.color = "red";
+                isPsw = false;
+            }
+
+        }
+
+        var checkValiMatch = function()
+        {   
+            // check are passwords match or not
+            if(password.value!=0 && passwordRepeat.value!=0 && isPsw==true)
+            {   
+                    if(password.value == passwordRepeat.value)
+                    {
+                        messageMatch.innerHTML = "Your password has been matched.";
+                        messageMatch.style.color = "green";
+                        isMatch = true;
+                        // show noticfication for age
+                        messageCheckbox.innerHTML = "You must be over 18 to access the site.";
+                        messageCheckbox.style.color = "red";
+                        isChild = false;
+                    }else
+                    {
+                        messageMatch.style.color = "red";
+                        messageMatch.innerHTML = "Your passwords doesn't match.";
+                        isMatch = false;
+                    }   
+            }
+        }
+
+        var checkValiEmail = function()
+        {
+            // check email validation
+            if(email.value.match(emailSymbols))
+            {
+                messageEmail.innerHTML = "Your email is in the correct format.";
+                messageEmail.style.color = "green";
+                isEmail = true;
+            }else
+            {
+                messageEmail.innerHTML = "Must be of the form abc@def.ghi.";
+                messageEmail.style.color = "red";
+                isEmail = false;
+            }
+
+            // check email is already taken or not
+            if(localStorage.getItem('email')==email.value)
+            {
+                messageEmail.innerHTML = "This email is already taken.";
+                messageEmail.style.color = "red";
+                isEmail = false;
+            }
+        }
+
+        var checkValiChild = function()
+        {
+            // check user is over 18 years old or not
+            if (checkboxid.checked == false){
+                messageCheckbox.innerHTML = "You must be over 18 to access website.";
+                messageCheckbox.style.color = "red";
+                isChild = false;
+            }else if(checkboxid.checked == true ){
+                messageCheckbox.innerHTML = "You are ready to access website.";
+                messageCheckbox.style.color = "green";
+                isChild = true;
+            }
+        }
+
+        
+        // sign up when user click on sign up button
+        $("submit").addEventListener("click",function(e){
+            // check that all validations
+            if(isUname==true && isPsw==true && isMatch==true && isEmail==true && isChild==true )
+            {
+                alert("success");
+                // store username, password and email in local storage
+                localStorage.setItem('uname',username.value);
+                localStorage.setItem('psw',password.value);
+                localStorage.setItem('email', email.value);
+            }else
+            {
+                alert("error");
+                e.preventDefault();
+            }
+        });
+        
+        // your local storage will be in window
+        function myStorage() {
+            try {
+                return 'localStorage' in window && window['localStorage'] !== null;
+            } catch (e) {
+                return false;
+            }
+        }   
+
+        function $(id)
+        {
+            return document.getElementById(id); // <--- I don't actual know how this work
+        }
+        
+        // let x = $("uname");
+        // x.addEventListener("focus", unamefocus, true);
+        // x.addEventListener("blur", unameblur, true);
+        
+        // function unamefocus()
+        // {
+        //     $("uname").style.backgroundColor = "yellow";
+
+        // }
+        // function unameblur()
+        // {
+        //     $("uname").style.backgroundColor = "green";
+        // }
+    </script>
+</body>
+</html>
